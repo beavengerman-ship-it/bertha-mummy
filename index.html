@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jerry Fashion — Enterprise Analytics & Storefront</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --bg-light: #f8fafc;
+            --text-main: #334155;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        aside { width: 260px; background: var(--primary); color: var(--white); display: flex; flex-direction: column; padding: 20px; }
+        aside h2 { font-size: 1.25rem; margin-bottom: 30px; letter-spacing: 0.05em; color: #60a5fa; }
+        aside nav a { color: #94a3b8; text-decoration: none; padding: 12px 15px; border-radius: 6px; margin-bottom: 8px; display: block; font-weight: 500; transition: 0.2s; }
+        aside nav a:hover, aside nav a.active { background: rgba(255, 255, 255, 0.1); color: var(--white); }
+
+        /* Main Content */
+        main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        header { background: var(--white); padding: 20px 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.5rem; color: var(--primary); }
+        
+        .dashboard-container { padding: 30px; max-width: 1200px; width: 100%; margin: 0 auto; }
+        
+        /* Metrics Grid */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--white); padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card h3 { font-size: 0.875rem; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+        .card .value { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+
+        /* AI Chat / Query Interface */
+        .ai-analyst-box { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .ai-analyst-box h2 { font-size: 1.15rem; margin-bottom: 15px; color: var(--primary); }
+        .chat-window { height: 250px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-light); padding: 15px; overflow-y: auto; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 6px; max-width: 80%; font-size: 0.95rem; line-height: 1.4; }
+        .message.user { background: var(--accent); color: var(--white); align-self: flex-end; }
+        .message.agent { background: var(--white); border: 1px solid var(--border); color: var(--text-main); align-self: flex-start; }
+        
+        .input-group { display: flex; gap: 10px; }
+        .input-group input { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.95rem; }
+        .input-group button { background: var(--accent); color: var(--white); border: none; padding: 0 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .input-group button:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <h2>JERRY FASHION</h2>
+        <nav>
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Inventory</a>
+            <a href="#">Sales Reports</a>
+            <a href="#">Multi-Agent Analyst</a>
+            <a href="#">Settings</a>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <h1>Store Performance & Decision Support</h1>
+            <span>Manager Portal</span>
+        </header>
+
+        <div class="dashboard-container">
+            <div class="metrics-grid">
+                <div class="card">
+                    <h3>Total Revenue (MTD)</h3>
+                    <div class="value">€48,250</div>
+                </div>
+                <div class="card">
+                    <h3>Active SKU Lines</h3>
+                    <div class="value">342</div>
+                </div>
+                <div class="card">
+                    <h3>Low Stock Alerts</h3>
+                    <div class="value" style="color: #dc2626;">4 Items</div>
+                </div>
+                <div class="card">
+                    <h3>Agent Status</h3>
+                    <div class="value" style="color: #16a34a; font-size: 1.25rem; margin-top: 5px;">Active & Ready</div>
+                </div>
+            </div>
+
+            <div class="ai-analyst-box">
+                <h2>Multi-Agent Enterprise Decision Support</h2>
+                <div class="chat-window" id="chatWindow">
+                    <div class="message agent">Hello! I am your Multi-Agent Data Analyst. Ask me anything regarding Jerry Fashion's sales, inventory pipelines, or revenue forecasting.</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="userInput" placeholder="e.g., Which clothing category generated the highest margin last week?">
+                    <button onclick="handleQuery()">Analyze</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function handleQuery() {
+            const inputField = document.getElementById('userInput');
+            const chatWindow = document.getElementById('chatWindow');
+            const query = inputField.value.trim();
+
+            if (!query) return;
+
+            // Append User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.textContent = query;
+            chatWindow.appendChild(userMsg);
+
+            inputField.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // Simulate Multi-Agent Pipeline Processing
+            setTimeout(() => {
+                const agentMsg = document.createElement('div');
+                agentMsg.className = 'message agent';
+                agentMsg.innerHTML = `<strong>[Orchestrator → Sales & Analytics Agent]:</strong> Analyzing transaction logs for query: "<em>${query}</em>"<br><br>` +
+                                     `<strong>Finding:</strong> Denim outerwear and summer linen shirts drove a <strong>14.2% increase</strong> in gross margins week-over-week. Inventory turnover for these lines is optimal, but stock levels in size Medium are reaching critical thresholds.`;
+                chatWindow.appendChild(agentMsg);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
